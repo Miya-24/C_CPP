@@ -6,22 +6,19 @@
 class MySmartCard {
 public:
     MySmartCard();
-	~MySmartCard();
-	BOOL bOpenService();
-	void vCloseService();
-	BOOL bConnectToSCResourceMng();
-	BOOL bSearchAndGetCRDeviceName();
+    ~MySmartCard();
     BOOL bConnectToSCard();
-	BOOL bGetRelatedData(BYTE);
+    BOOL bGetRelatedData(BYTE);
     BOOL bDisplayRelatedData_Type4A(BYTE, BYTE*, DWORD);
     BOOL bDisplayRelatedData_Felica(BYTE, BYTE*, DWORD);
     BYTE byCheckCardType();
+    void vDisConnectSCard();
+    void vSetActiveProtocol(DWORD);
+    void vSetCardContxt(SCARDHANDLE);
 private:
-	SCARDCONTEXT hContext;
     DWORD		 dwActiveProtocol;
     SCARDHANDLE  hCard;
     BYTE         byCardType;
-	LPTSTR	     lpszReaderName;
 };
 
 #endif SCARDCTRL_H_
