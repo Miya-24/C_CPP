@@ -1,34 +1,36 @@
 #include "Main.h"
 #include "SCardCtrl.h"
-
+#include "DeviceCtrl.h"
 int main()
 {
-	MySmartCard* mysc = new MySmartCard();
-	if (mysc == NULL) return EXIT_FAILURE;
+	//Device Class
+	MyFelicaDevice* myfd = new MyFelicaDevice();
+	if (myfd == NULL) return EXIT_FAILURE;
 	BOOL bRtn = true;
 
 	//Open smart card reader / writer service
-	bRtn = mysc->bOpenService();
+	bRtn = myfd->bOpenService();
 	if (!bRtn) {
-		mysc->vCloseService();
-		delete mysc;
-		mysc = NULL;
+		myfd->vCloseService();
+		delete myfd;
+		myfd = NULL;
 		return EXIT_FAILURE;
 	}
+
 	//Connect to smart card
-	bRtn = mysc->bConnectToSCard();
+	bRtn = myfd->bConnectToSCard();
 	if (!bRtn) {
-		mysc->vCloseService();
-		delete mysc;
-		mysc = NULL;
+		myfd->vCloseService();
+		delete myfd;
+		myfd = NULL;
 		return EXIT_FAILURE;
 	}
 	//Check card type
-	BYTE byRtn = mysc->byCheckCardType();
+	BYTE byRtn = myfd->mysc->byCheckCardType();
 	if (byRtn == CARD_TYPE_UNKNOWN) {
-		mysc->vCloseService();
-		delete mysc;
-		mysc = NULL;
+		myfd->vCloseService();
+		delete myfd;
+		myfd = NULL;
 		return EXIT_FAILURE;
 	}
 	//Get command
@@ -37,26 +39,26 @@ int main()
 	BYTE cmd[4] = {'\0'};
 	vGetCmd(&Num, cmd, &CmdSize);
 	if (Num < 1 || Num > 5) {
-		mysc->vCloseService();
-		delete mysc;
-		mysc = NULL;
+		myfd->vCloseService();
+		delete myfd;
+		myfd = NULL;
 		return EXIT_FAILURE;
 	}
 	//Get related data(UID, PMm, Card Name, ...)
 	for (int i = 0; i < CmdSize; i++) {
-		bRtn = mysc->bGetRelatedData(cmd[i]);
+		bRtn = myfd->mysc->bGetRelatedData(cmd[i]);
 		if (!bRtn) {
-			mysc->vCloseService();
-			delete mysc;
-			mysc = NULL;
+			myfd->vCloseService();
+			delete myfd;
+			myfd = NULL;
 			return EXIT_FAILURE;
 		}
 	}
 	fprintf_s(stdout, "\n");
 	//Close service
-	mysc->vCloseService();
-	delete mysc;
-	mysc = NULL;
+	myfd->vCloseService();
+	delete myfd;
+	myfd = NULL;
 	return EXIT_SUCCESS;
 }
 //------------------------------------------
