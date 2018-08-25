@@ -10,9 +10,9 @@ public:
     MyFelicaDevice();
     ~MyFelicaDevice();
     BOOL bOpenService();
-	void vCloseService();
+    void vCloseService();
     BOOL bConnectToSCResourceMng();
-	BOOL bSearchAndGetCRDeviceName();
+    BOOL bSearchAndGetCRDeviceName();
     BOOL bConnectToSCard();
     void vDisConnectSCard();
     SCARDCONTEXT hGetContext();
