@@ -49,3 +49,4 @@ SCARD_IO_REQUEST* CardProtocol2PCI(DWORD dwProtocol);
 void vGetCmd(int*, BYTE*, int*);
 
 #endif
+
